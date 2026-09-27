@@ -5,7 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -s https://ipinfo.io/json | head -8
-          for u in https://cinematica.uz/ https://cinematica.uz/api/v1/cinema http://cinematica.uz/; do
-            echo "== $u"; curl -sS -m 20 -o /dev/null -w "%{http_code} connect=%{time_connect} total=%{time_total} ip=%{remote_ip}\n" "$u" || true
-          done
+          for i in 1 2 3; do for p in movies movies/today movies/soon repertory/movie/1014/grouped; do
+            echo "== $p"; curl -sS -m 60 -A "Mozilla/5.0" -H "Accept: application/json" -o /dev/null -w "%{http_code} ttfb=%{time_starttransfer} total=%{time_total} size=%{size_download}\n" "https://cinematica.uz/api/v1/$p" || true
+          done; done
