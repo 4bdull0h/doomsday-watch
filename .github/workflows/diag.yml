@@ -1,0 +1,11 @@
+name: diag
+on: workflow_dispatch
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -s https://ipinfo.io/json | head -8
+          for u in https://cinematica.uz/ https://cinematica.uz/api/v1/cinema http://cinematica.uz/; do
+            echo "== $u"; curl -sS -m 20 -o /dev/null -w "%{http_code} connect=%{time_connect} total=%{time_total} ip=%{remote_ip}\n" "$u" || true
+          done
