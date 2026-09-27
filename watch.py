@@ -21,10 +21,16 @@ BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "")
 CHAT_ID = os.environ.get("TG_CHAT_ID", "")
 
 
-def get(path):
+def get(path, attempts=3):
     req = urllib.request.Request(API + path, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
-    with urllib.request.urlopen(req, timeout=20) as r:
-        return json.load(r)
+    for i in range(attempts):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.load(r)
+        except Exception:
+            if i == attempts - 1:
+                raise
+            time.sleep(5)
 
 
 def notify(text):
